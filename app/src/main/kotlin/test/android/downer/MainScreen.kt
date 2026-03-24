@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 internal fun MainScreen() {
     val providers = remember { App.providers }
     val isDeviceOwner = providers.admins.owners.collectAsState().value
+    val versions = remember { providers.admins.getVersions() }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -47,6 +49,18 @@ internal fun MainScreen() {
                     }
                     .wrapContentSize(),
                 text = if (isDeviceOwner) "remove admin" else "set admin",
+            )
+            val text = """
+                api: ${versions.api}
+                sdk: ${versions.sdk}
+                firmware: ${versions.firmware}
+                mcu: ${versions.mcu}
+            """.trimIndent()
+            BasicText(
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+                    .padding(16.dp),
+                text = text,
             )
         }
     }

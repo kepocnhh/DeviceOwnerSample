@@ -8,6 +8,8 @@ import kotlinx.coroutines.SupervisorJob
 import test.android.downer.provider.Admins
 import test.android.downer.provider.Contexts
 import test.android.downer.provider.FinalAdmins
+import test.android.downer.provider.FinalLoggers
+import test.android.downer.provider.Loggers
 import test.android.downer.provider.Providers
 
 internal class App : Application() {
@@ -17,6 +19,7 @@ internal class App : Application() {
             main = Dispatchers.Main,
             default = Dispatchers.Default,
         )
+        val loggers: Loggers = FinalLoggers
         val job = SupervisorJob()
         val coroutineScope = CoroutineScope(contexts.main + job)
         val context: Context = this
@@ -24,9 +27,11 @@ internal class App : Application() {
             context = context,
             coroutineScope = coroutineScope,
             default = contexts.default,
+            loggers = loggers,
         )
         _providers = Providers(
             contexts = contexts,
+            loggers = loggers,
             admins = admins,
         )
     }
