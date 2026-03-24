@@ -4,11 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,6 +26,7 @@ internal fun MainScreen() {
     val providers = remember { App.providers }
     val isDeviceOwner = providers.admins.owners.collectAsState().value
     val versions = remember { providers.admins.getVersions() }
+    val di = remember { providers.admins.getDeviceInfo() }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -36,7 +39,7 @@ internal fun MainScreen() {
         ) {
             BasicText(
                 modifier = Modifier
-                    .fillMaxWidth(1f)
+                    .fillMaxWidth()
                     .padding(16.dp),
                 text = "owner: $isDeviceOwner",
             )
@@ -50,17 +53,30 @@ internal fun MainScreen() {
                     .wrapContentSize(),
                 text = if (isDeviceOwner) "remove admin" else "set admin",
             )
-            val text = """
-                api: ${versions.api}
-                sdk: ${versions.sdk}
-                firmware: ${versions.firmware}
-                mcu: ${versions.mcu}
-            """.trimIndent()
             BasicText(
                 modifier = Modifier
-                    .fillMaxWidth(1f)
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
                     .padding(16.dp),
-                text = text,
+                text = """
+                    api: ${versions.api}
+                    sdk: ${versions.sdk}
+                    firmware: ${versions.firmware}
+                    mcu: ${versions.mcu}
+                """.trimIndent(),
+            )
+            Spacer(Modifier.height(8.dp))
+            BasicText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
+                    .padding(16.dp),
+                text = """
+                    serial number: ${di.serialNumber}
+                    mac ethernet: ${di.macEthernet}
+                """.trimIndent(),
             )
         }
     }

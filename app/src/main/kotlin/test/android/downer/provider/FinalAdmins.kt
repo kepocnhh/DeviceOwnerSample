@@ -93,4 +93,12 @@ internal class FinalAdmins(
             mcu = mcuVersion,
         )
     }
+
+    override fun getDeviceInfo(): Admins.DeviceInfo {
+        val di = SdkApi.getInstance().DeviceInfo()
+        return Admins.DeviceInfo(
+            serialNumber = di.serialNumber,
+            macEthernet = di.ethMac,
+        )
+    }
 }

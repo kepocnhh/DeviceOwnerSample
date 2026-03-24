@@ -10,8 +10,14 @@ internal interface Admins {
         val mcu: String?,
     )
 
+    class DeviceInfo(
+        val serialNumber: String,
+        val macEthernet: String,
+    )
+
     val owners: StateFlow<Boolean>
 
     fun update(isDeviceOwner: Boolean)
     fun getVersions(): Versions
+    fun getDeviceInfo(): DeviceInfo
 }
